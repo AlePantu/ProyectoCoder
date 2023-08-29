@@ -1,0 +1,19 @@
+{% extends 'padre.html' %}
+
+{% block contenidoQueCambia %}
+            <h1>Resultado de Busqueda</h1>
+
+            <ul>
+                
+                {% for curso in cursos %}
+                    
+                <li>
+                    {{curso.nombre}} , {{curso.camada}}
+                </li>
+                    
+                {% endfor %}
+            </ul>
+                    
+
+            
+{% endblock contenidoQueCambia %}
