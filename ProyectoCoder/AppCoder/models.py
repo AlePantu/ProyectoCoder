@@ -24,7 +24,12 @@ class Profesor(models.Model):
     email = models.EmailField(null=True)
     profesion = models.CharField(max_length=30)
 
+    def __str__(self) -> str:
+        return f'{self.nombre} {self.apellido}'
+
 class Entregable(models.Model):
     nombre = models.CharField(max_length=30)
     fechaDeEntrega = models.DateField()
     entregado = models.BooleanField()
+
+

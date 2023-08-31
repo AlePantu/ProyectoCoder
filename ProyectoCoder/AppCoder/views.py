@@ -1,7 +1,8 @@
 from django.shortcuts import render
-from .models import Curso
+from .models import *
 from django.http import HttpResponse , HttpRequest
-from .forms import CursoFormulario
+from .forms import CursoFormulario , ProfesorFormulario
+
 
 # Create your views here.
 
@@ -77,3 +78,83 @@ def buscar(req):
     else:
 
          return HttpResponse(f'No escribiste ninguna camada')
+
+
+def listaProfesores(req):
+
+        profesores = Profesor.objects.all()
+
+        return render(req , "leerProfesores.html" , {"profesores" : profesores})
+
+
+def crea_profesor(req : HttpRequest):
+
+    print('method' , req.method)
+    print('post' , req.POST)
+
+
+    if req.method == 'POST':
+
+        miFormulario = ProfesorFormulario(req.POST)
+        if miFormulario.is_valid():
+
+            print(miFormulario.cleaned_data)
+            data = miFormulario.cleaned_data
+
+            profesor = Profesor(nombre = data["nombre"] ,apellido = data["apellido"], email = data["email"] , profesion = data["profesion"])
+            profesor.save()
+            return render (req , "inicio.html" , {"mensaje":"Profesor creado con exito" })
+        else:
+            return render (req , "inicio.html" , {"mensaje":"Formulario Invalido" })
+    else:
+
+        miFormulario = ProfesorFormulario()
+
+        return render(req, "profesorFormulario.html" , {"miFormulario" : miFormulario})
+    
+
+def eliminarProfesor(req , id):
+
+    if req.method == 'POST' :
+
+      profesor =  Profesor.objects.get(id = id)
+
+      profesor.delete()
+
+      profesores = Profesor.objects.all()
+
+    return render(req , "leerProfesores.html" , {"profesores" : profesores})
+
+
+def editarProfesor(req , id):
+
+    profesor =  Profesor.objects.get(id = id)
+
+    if req.method == 'POST':
+
+        miFormulario = ProfesorFormulario(req.POST)
+        if miFormulario.is_valid():
+
+            data = miFormulario.cleaned_data
+
+            profesor.nombre = data["nombre"]
+            profesor.apellido = data["apellido"]
+            profesor.email = data["email"]
+            profesor.profesion = data["profesion"]
+            profesor.save()
+            return render (req , "inicio.html" , {"mensaje":"Profesor actualizado con exito" })
+        else:
+            return render (req , "inicio.html" , {"mensaje":"Formulario Invalido" })
+    else:
+
+        miFormulario = ProfesorFormulario(initial={
+            "nombre" :profesor.nombre,
+            "apellido":profesor.apellido,
+            "email": profesor.email,
+            "profesion": profesor.profesion
+
+        })
+
+        return render(req, "editarProfesor.html" , {"miFormulario" : miFormulario , "id":profesor.id})
+
+

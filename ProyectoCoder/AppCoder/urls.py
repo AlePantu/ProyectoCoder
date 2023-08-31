@@ -12,5 +12,9 @@ urlpatterns = [
     path('entregables/', entregables , name='Entregables'),
     path('curso-formulario/' , curso_formulario , name='CursoFormulario'),
     path('busqueda-camada/' , busqueda_camada , name='BusquedaCamada'),
-    path('buscar/' , buscar , name='Buscar')
+    path('buscar/' , buscar , name='Buscar'),
+    path('lista-profesores/' , listaProfesores , name='ListaProfesores'),
+    path('crea-profesor/' , crea_profesor , name='CreaProfesor'),
+    path('elimina-profesor/<int:id>' , eliminarProfesor , name='EliminaProfesor'),
+    path('editar-profesor/<int:id>' , editarProfesor , name='EditarProfesor')
 ]
